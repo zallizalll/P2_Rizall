@@ -92,7 +92,7 @@
             <br>
             <p><span id="p-p3">semoga saya bisa di terima disini</span></p>
             <br>
-            <p>Sincerely, <span id="p-sincerely"></span></p>
+            <p>Dengan Hormat, <span id="p-sincerely"></span></p>
             <br>
             <br>
             <br>
