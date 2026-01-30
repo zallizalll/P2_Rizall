@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Lamaran Application Letter</title>
+    <title>Rizall - Lamaran Application Letter</title>
     <link rel="stylesheet" href="{{ asset('css/preview.css') }}">
 </head>
 
@@ -85,6 +85,7 @@
             <p>Dear,</p>
             <p><span id="p-penerima"></span></p>
             <br>
+            <p>Dear,</p>
             <p><span id="p-p1">dengan hormat bapak ini saya membuat surat lamaran ini</span></p>
             <br>
             <p><span id="p-p2">dengan surat ini saya ingin melamar di divisi </span></p>

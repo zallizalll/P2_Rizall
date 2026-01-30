@@ -183,3 +183,218 @@ textarea {
         display: none !important;
     }
 }
+
+
+
+
+
+
+.container {
+    background: rgb(235, 235, 233);
+    display: flex;
+    gap: 20px;
+}
+
+.left,
+.right {
+    width: 50%;
+    border: 1px solid #ada9a9;
+    padding: 15px;
+}
+
+.right {
+    background: #ffffff;
+}
+
+/* form element */
+input,
+select,
+textarea,
+button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* biar textarea ga aneh */
+textarea {
+    resize: vertical;
+}
+
+/* hidden helper */
+.hidden {
+    display: none;
+}
+
+.preview-img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.info-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* CENTER horizontal */
+    text-align: center; /* teks ikut center */
+    margin-bottom: 20px;
+}
+
+.logo {
+    max-width: 230px;
+    margin-bottom: 10px;
+}
+
+.info-text p {
+    margin-left: 550px;
+}
+
+/* ================= BUTTON UPDATE ================= */
+
+/* BUTTON GLOBAL */
+button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    color: white;
+    transition: 0.3s;
+}
+
+/* WARNA BUTTON */
+#btnSave {
+    background-color: #007bff;
+}
+
+#btnPrint {
+    background-color: #28a745;
+}
+
+#btnClear {
+    background-color: #dc3545;
+}
+
+/* HOVER EFFECT */
+#btnSave:hover {
+    background-color: #0069d9;
+}
+
+#btnPrint:hover {
+    background-color: #218838;
+}
+
+#btnClear:hover {
+    background-color: #c82333;
+}
+
+/* SEJAJARIN SEMUA BUTTON */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-actions button {
+    flex: 1; /* semua tombol sama lebar */
+}
+
+/* tombol kecil untuk remove tetap seperti semula */
+.btn-remove {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 4px 6px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 10px;
+    width: 22px;
+    height: 28px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-remove:hover {
+    background-color: #c82333;
+}
+
+/* ================= PRINT STYLES ================= */
+@media print {
+    /* ukuran kertas */
+    @page {
+        size: A4;
+        margin: 2cm;
+    }
+    body::before {
+        content: "TES";
+        display: block;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+    /* sembunyikan semua */
+    body * {
+        visibility: hidden;
+    }
+
+    /* tampilkan hanya preview */
+    .right,
+    .right * {
+        visibility: visible;
+    }
+
+    /* MATIKAN LAYOUT WEB */
+    .container {
+        display: block !important;
+    }
+
+    .left {
+        display: none !important;
+    }
+
+    /* RESET TOTAL STYLE RIGHT */
+    .right {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        background: white !important;
+        box-shadow: none !important;
+    }
+
+    /* rapihin teks */
+    h4 {
+        margin: 10px 0 4px;
+        font-size: 14px;
+    }
+
+    p {
+        margin: 2px 0;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    hr {
+        margin: 8px 0;
+    }
+
+    /* logo */
+    .logo {
+        max-width: 140px;
+        display: block;
+        margin: 0 auto 10px auto;
+    }
+
+    /* hilangkan tombol */
+    .form-actions,
+    button {
+        display: none !important;
+    }
+}
