@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 
 
 route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 // ======================================================================
