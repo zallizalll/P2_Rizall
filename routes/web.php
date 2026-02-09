@@ -2,28 +2,33 @@
 
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-//  Redirect root ke login
 Route::get('/', function () {
-    return redirect('/login');
+    return Auth::check() ? redirect('/dashboard') : redirect('/login');
 });
 
-    // Auth routes
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
 Route::middleware('auth')->group(function () {
-    // Ubah 'dashboard' jadi 'admin.dashboard' karena file lo di folder admin
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');
 
-    // Tambahkan route untuk welcome
+    // Balikin view welcome supaya bisa diakses
     Route::get('/Lamar-Pekerjaan', function () {
         return view('welcome');
     })->name('welcome');
     
-    // Logout route
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/logout', function () {
+        return redirect('/dashboard');
+    });
+    
+    Route::get('/me', function () {
+        return redirect('/dashboard');
+    });
 });

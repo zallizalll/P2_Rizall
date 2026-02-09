@@ -24,10 +24,10 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Generate JWT token untuk keperluan lain (API, dll)
-            $user = Auth::user();
-            $token = JWTAuth::fromUser($user);
-            session(['jwt_token' => $token]);
+            // // Generate JWT token untuk keperluan lain (API, dll)
+            // $user = Auth::user();
+            // $token = JWTAuth::fromUser($user);
+            // session(['jwt_token' => $token]);
 
             return redirect()->intended('/dashboard');
         }

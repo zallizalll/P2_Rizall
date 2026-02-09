@@ -11,16 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-    $middleware->alias([
-        'jwt.auth' => \App\Http\Middleware\JwtMiddleware::class,
-    ]);
-    
-    // Exclude login dari CSRF
-    $middleware->validateCsrfTokens(except: [
-        '/login',
-    ]);
+        $middleware->alias([
+            'jwt.auth' => \App\Http\Middleware\JwtMiddleware::class,
+            // JANGAN tambahin 'role' => ... kalau gak pakai
+        ]);
+        
+        // Exclude login dari CSRF
+        $middleware->validateCsrfTokens(except: [
+            '/login',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
-    
