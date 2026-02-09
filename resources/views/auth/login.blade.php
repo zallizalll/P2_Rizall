@@ -40,11 +40,11 @@
                     <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <a href="index.html" class="">
-                                <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>HiroPlay</h3>
+                                <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Surat Desa</h3>
                             </a>
                             <h3>Sign In</h3>
                         </div>
-                        <form method="POST" action="{{ route('login-proses') }}">
+                        <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="form-floating mb-3">
                                 <input type="email"
@@ -84,7 +84,6 @@
                             <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign In</button>
                         </form>
 
-                        <p class="text-center mb-0">Don't have an Account? <a href="{{ route('register') }}">Sign Up</a></p>
                     </div>
                 </div>
             </div>

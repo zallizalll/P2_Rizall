@@ -4,62 +4,60 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function login()
+    public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    public function register()
-    {
-        return view('auth.register');
-    }
-
-    public function register_proses(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:50|unique:users,name',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:4|same:repeat_password',
-            'repeat_password' => 'required|min:4',
-        ]);
-
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
-    }
-
-    public function login_proses(Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
 
+        // Login pakai Laravel Auth biasa
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/admin/dashboard');
+
+            // Generate JWT token untuk keperluan lain (API, dll)
+            $user = Auth::user();
+            $token = JWTAuth::fromUser($user);
+            session(['jwt_token' => $token]);
+
+            return redirect()->intended('/dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'Email atau password salah',
-        ]);
+            'email' => 'Email atau password salah.'
+        ])->withInput($request->only('email'));
     }
 
     public function logout(Request $request)
     {
+        try {
+            $token = session('jwt_token');
+            if ($token) {
+                JWTAuth::setToken($token)->invalidate();
+            }
+        } catch (\Exception $e) {
+            // Ignore
+        }
+
+        session()->forget('jwt_token');
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    public function me()
+    {
+        return response()->json(Auth::user());
     }
 }
