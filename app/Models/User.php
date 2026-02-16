@@ -10,15 +10,17 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
     protected $fillable = [
         'name',
         'email',
         'password',
-    ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
+        'jabatan_id',
+        'no_hp'
     ];
 
     protected function casts(): array
@@ -37,5 +39,15 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function jabatan()
+    {
+        return $this->belongsTo(Jabatan::class, 'jabatan_id');
+    }
+
+    public function detail()
+    {
+        return $this->hasOne(UserDetail::class);
     }
 }

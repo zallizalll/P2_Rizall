@@ -53,9 +53,12 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="button.html" class="dropdown-item">Buttons</a>
-                            <a href="typography.html" class="dropdown-item">Typography</a>
-                            <a href="element.html" class="dropdown-item">Other Elements</a>
+                            <a href="{{ route('admin.jabatan') }}" class="dropdown-item">Jabatan Management</a>
+                            <a href="{{ route('admin.users') }}" class="dropdown-item">User Management</a>
+                            <a href="{{ route('admin.rukun') }}" class="dropdown-item">Rukun Management</a>
+                            <a href="{{ route('admin.family') }}" class="dropdown-item">Keluarga Management</a>
+                            <a href="{{ route('admin.warga') }}" class="dropdown-item">Warga Management</a>
+                            <a href="{{ route('admin.lurah-config') }}" class="dropdown-item">Lurah Config</a>
                         </div>
                     </div>
                     <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
