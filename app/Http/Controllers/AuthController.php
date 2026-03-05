@@ -2,62 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Repository\UserRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function showLoginForm()
+    protected $userRepository;
+
+    public function __construct(UserRepository $userRepository)
     {
-        return view('auth.login');
+        $this->userRepository = $userRepository;
     }
 
-    public function login(Request $request)
+    public function loginWeb(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required|string|min:6',
         ]);
 
-        // Login pakai Laravel Auth biasa
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+        $user = $this->userRepository->findByEmail($request->email);
 
-            // // Generate JWT token untuk keperluan lain (API, dll)
-            // $user = Auth::user();
-            // $token = JWTAuth::fromUser($user);
-            // session(['jwt_token' => $token]);
-
-            return redirect()->intended('/dashboard');
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return redirect()->back()
+                ->withErrors(['email' => 'Email atau password salah'])
+                ->withInput();
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.'
-        ])->withInput($request->only('email'));
+        $user->load('jabatan');
+
+        $token = JWTAuth::fromUser($user);
+
+        session([
+            'token' => $token,
+            'user' => $user
+        ]);
+
+        $redirectRoute = match ($user->jabatan->slug) {
+            'administrator'  => 'dashboard.admin',
+            'kepala_lurah'   => 'dashboard.lurah',
+            'sekre_lurah'    => 'dashboard.sekre',
+            'staff_pelayanan' => 'dashboard.staff',
+            default          => 'dashboard.admin'
+        };
+
+        return redirect()->route($redirectRoute)->with([
+            'jwt_token' => $token,
+            'user_data' => $user
+        ]);
     }
 
-    public function logout(Request $request)
+    public function logoutWeb(Request $request)
     {
-        try {
-            $token = session('jwt_token');
-            if ($token) {
+        $token = session('token');
+
+        if ($token) {
+            try {
                 JWTAuth::setToken($token)->invalidate();
+            } catch (\Exception $e) {
             }
-        } catch (\Exception $e) {
-            // Ignore
         }
 
-        session()->forget('jwt_token');
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        session()->forget(['token', 'user']);
+        session()->flush();
 
-        return redirect('/login');
-    }
-
-    public function me()
-    {
-        return response()->json(Auth::user());
+        return redirect()->route('login')->with('success', 'Logout berhasil');
     }
 }

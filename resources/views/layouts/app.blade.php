@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Dashboard Admin</title>
+    <title>@yield('title', 'Dashboard Admin')</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
@@ -19,6 +20,7 @@
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <!-- Libraries Stylesheet -->
     <link href="{{ asset('assets/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
@@ -28,66 +30,44 @@
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Template Stylesheet -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+
+    @stack('styles')
 </head>
 
 <body>
     <div class="container-fluid position-relative d-flex p-0">
+
         <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
-            <nav class="navbar bg-secondary navbar-dark">
-                <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Surat Desa</h3>
-                </a>
-                <div class="d-flex align-items-center ms-4 mb-4">
-                    <div class="position-relative">
-                        <img class="rounded-circle" src="{{ asset('assets/img/user.jpg') }}" alt="" style="width: 40px; height: 40px;">
-                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
-                    </div>
-                    <div class="ms-3">
-                        <h6 class="mb-0">{{ Auth::user()->name }}</h6>
-                        <span>{{ ucfirst(Auth::user()->role) }}</span>
-                    </div>
-                </div>
-                <div class="navbar-nav w-100">
-                    <a href="{{ route('dashboard') }}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="{{ route('admin.jabatan') }}" class="dropdown-item">Jabatan Management</a>
-                            <a href="{{ route('admin.users') }}" class="dropdown-item">User Management</a>
-                            <a href="{{ route('admin.rukun') }}" class="dropdown-item">Rukun Management</a>
-                            <a href="{{ route('admin.family') }}" class="dropdown-item">Keluarga Management</a>
-                            <a href="{{ route('admin.warga') }}" class="dropdown-item">Warga Management</a>
-                            <a href="{{ route('admin.lurah-config') }}" class="dropdown-item">Lurah Config</a>
-                        </div>
-                    </div>
-                    <a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
-                    <a href="{{ route('welcome') }}" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Lamar Perkerjaan</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="signin.html" class="dropdown-item">Sign In</a>
-                            <a href="signup.html" class="dropdown-item">Sign Up</a>
-                            <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item">Blank Page</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
+        @include('components.sidebar')
         <!-- Sidebar End -->
 
+        <!-- Content Wrapper Start -->
+        <div class="content">
 
-        <!-- Content Start -->
-        @yield('content')
-        <!-- Content End -->
+            <!-- Navbar Start -->
+            @include('components.navbar')
+            <!-- Navbar End -->
 
+            <!-- Page Content Start -->
+            <div class="container-fluid pt-4 px-4">
+                @yield('content')
+            </div>
+            <!-- Page Content End -->
+
+        </div>
+        <!-- Content Wrapper End -->
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
+
+    {{-- Simpan JWT token ke localStorage setelah login --}}
+    @if(session('jwt_token'))
+    <script>
+        localStorage.setItem('jwt_token', '{{ session("jwt_token") }}');
+        localStorage.setItem('user', '{!! json_encode(session("user_data")) !!}');
+    </script>
+    @endif
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -102,6 +82,8 @@
 
     <!-- Template Javascript -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+
+    @stack('scripts')
 </body>
 
 </html>

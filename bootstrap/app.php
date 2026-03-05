@@ -15,10 +15,31 @@ return Application::configure(basePath: dirname(__DIR__))
             'jwt.auth' => \App\Http\Middleware\JwtMiddleware::class,
             // JANGAN tambahin 'role' => ... kalau gak pakai
         ]);
-        
+
         // Exclude login dari CSRF
         $middleware->validateCsrfTokens(except: [
             '/login',
+        ]);
+    })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'guest.check' => \App\Http\Middleware\CheckGuest::class,
+        ]);
+    })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'guest.check' => \App\Http\Middleware\CheckGuest::class,
+            'auth.check' => \App\Http\Middleware\CheckAuth::class, // tambah ini
+        ]);
+    })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'guest.check' => \App\Http\Middleware\CheckGuest::class,
+            'auth.check' => \App\Http\Middleware\CheckAuth::class,
+            'role.admin' => \App\Http\Middleware\CheckAdmin::class,
+            'role.kepala_lurah' => \App\Http\Middleware\CheckKepalaLurah::class,
+            'role.sekre' => \App\Http\Middleware\CheckSekre::class,
+            'role.staff' => \App\Http\Middleware\CheckStaff::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

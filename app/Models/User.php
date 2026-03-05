@@ -3,33 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable;
+    protected $fillable = [
+        'email',
+        'password',
+        'jabatan_id',
+    ];
 
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'jabatan_id',
-        'no_hp'
+    protected $casts = [
+        'password' => 'hashed',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 
     public function getJWTIdentifier()
     {
@@ -46,8 +37,20 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Jabatan::class, 'jabatan_id');
     }
 
+    public function userDetail()
+    {
+        return $this->hasOne(UserDetail::class, 'user_id');
+    }
+
+    // alias untuk kemudahan akses di blade
     public function detail()
     {
-        return $this->hasOne(UserDetail::class);
+        return $this->hasOne(UserDetail::class, 'user_id');
+    }
+
+    // name dari userDetail
+    public function getNameAttribute()
+    {
+        return $this->userDetail?->name ?? '';
     }
 }

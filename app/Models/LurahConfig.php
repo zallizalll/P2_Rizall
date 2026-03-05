@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class LurahConfig extends Model
 {
-    use HasFactory;
-
     protected $table = 'lurah_config';
 
     protected $fillable = [
@@ -17,6 +14,8 @@ class LurahConfig extends Model
         'city',
         'district',
         'pos_code',
+        'address',
+        'contact',
         'logo',
     ];
 }

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Family extends Model
 {
+    use HasFactory;
+
     protected $table = 'family';
 
     protected $fillable = [
@@ -26,9 +29,13 @@ class Family extends Model
         return $this->belongsTo(Rukun::class, 'rw_id');
     }
 
-    // ⬇ TAMBAHAN PENTING
-    public function head()
+    public function familyHead()
     {
         return $this->belongsTo(Warga::class, 'family_head_id');
+    }
+
+    public function members()
+    {
+        return $this->hasMany(Warga::class, 'no_kk', 'no_kk');
     }
 }

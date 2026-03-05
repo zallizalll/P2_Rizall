@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Warga extends Model
 {
+    use HasFactory;
+
     protected $table = 'warga';
 
     protected $fillable = [
@@ -22,4 +25,13 @@ class Warga extends Model
         'occupation',
         'blood_type',
     ];
+
+    protected $casts = [
+        'birth_date' => 'date',
+    ];
+
+    public function family()
+    {
+        return $this->belongsTo(Family::class, 'no_kk', 'no_kk');
+    }
 }

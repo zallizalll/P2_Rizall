@@ -2,23 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class UserDetail extends Model
 {
-    use HasFactory;
-
     protected $table = 'user_detail';
 
     protected $fillable = [
+        'user_id',
         'nip',
+        'name',
         'no_hp',
         'address',
         'birth_date',
         'nik',
         'status',
-        'user_id',
+    ];
+
+    protected $casts = [
+        'birth_date' => 'date',
     ];
 
     public function user()
